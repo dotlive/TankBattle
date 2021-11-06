@@ -8,16 +8,19 @@ namespace RuleBasedAI
     class HPBelow : Condition
     {
         private int m_TargetHP;
+
         public HPBelow(int targetHP)
         {
             m_TargetHP = targetHP;
         }
+
         public override bool IsTrue(IAgent agent)
         {
-            Tank t = (Tank)agent;
+            Tank t = (Tank) agent;
             return t.HP <= m_TargetHP;
         }
     }
+
     class HasSuperStar : Condition
     {
         public override bool IsTrue(IAgent agent)
@@ -29,22 +32,26 @@ namespace RuleBasedAI
                     return true;
                 }
             }
+
             return false;
         }
     }
+
     class HasSeenEnemy : Condition
     {
         public override bool IsTrue(IAgent agent)
         {
-            Tank t = (Tank)agent;
+            Tank t = (Tank) agent;
             Tank oppTank = Match.instance.GetOppositeTank(t.Team);
             if (oppTank == null)
             {
                 return false;
             }
+
             return t.CanSeeOthers(oppTank);
         }
     }
+
     class MyTank : Tank
     {
         private float m_LastTime = 0;
@@ -65,10 +72,12 @@ namespace RuleBasedAI
                 new HPBelow(50),
                 new NotCondition(new HasSuperStar()));
         }
+
         protected override void OnUpdate()
         {
             base.OnUpdate();
-            Tank oppTank = Match.instance.GetOppositeTank(Team);
+
+            var oppTank = Match.instance.GetOppositeTank(Team);
             if (oppTank != null && oppTank.IsDead == false)
             {
                 TurretTurnTo(oppTank.Position);
@@ -77,10 +86,12 @@ namespace RuleBasedAI
             {
                 TurretTurnTo(Position + Forward);
             }
+
             if (m_Fire.IsTrue(this))
             {
                 Fire();
             }
+
             if (m_GetSuperStar.IsTrue(this))
             {
                 Move(Vector3.zero);
@@ -100,16 +111,19 @@ namespace RuleBasedAI
                 }
             }
         }
+
         protected override void OnReborn()
         {
             base.OnReborn();
             m_LastTime = 0;
         }
+
         private bool ApproachNextDestination()
         {
             float halfSize = PhysicsUtils.MaxFieldSize * 0.5f;
             return Move(new Vector3(Random.Range(-halfSize, halfSize), 0, Random.Range(-halfSize, halfSize)));
         }
+
         public override string GetName()
         {
             return "RuleBasedAITank";

@@ -1,9 +1,26 @@
-Library/
-TankBattle.sln
-TankBattle.CSharp.csproj
-Temp/
-.vs/TankBattle/v14/.suo
-TankBattle.csproj
-TankBattle.CSharp.Editor.csproj
-TankBattle.Editor.csproj
+# directories
+.gradle/
+.idea/
+.vs/
+[Ll]ibrary/
+[Ll]ogs
+[Oo]bj/
+[Oo]utput/
+[Tt]emp/
+
+# files
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.opendb
+*.apk
+*.log
 *.stackdump

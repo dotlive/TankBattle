@@ -6,13 +6,16 @@ namespace Main
     {
         public enum ERotateAxis
         {
-            X, Y, Z
+            X,
+            Y,
+            Z
         }
 
         public ERotateAxis Axis = ERotateAxis.Z;
         public float Speed = 1f;
 
         private Vector3 m_RotationAxis;
+
         void Start()
         {
             switch (Axis)
@@ -31,6 +34,7 @@ namespace Main
                     break;
             }
         }
+
         void Update()
         {
             transform.Rotate(m_RotationAxis, Speed * Time.deltaTime, Space.Self);

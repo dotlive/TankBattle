@@ -2,40 +2,38 @@
 
 namespace Main
 {
+    /// <summary>
+    /// 导弹
+    /// </summary>
     public class Missile : MonoBehaviour
     {
         private static int IDGen = 0;
+
         private static int GetNextID()
         {
             return IDGen++;
         }
+
         public ETeam Team
         {
-            get
-            {
-                return m_Owner.Team;
-            }
+            get { return m_Owner.Team; }
         }
-        public int ID
-        {
-            get; private set;
-        }
+
+        public int ID { get; private set; }
+
         public Vector3 Position
         {
-            get
-            {
-                return transform.position;
-            }
+            get { return transform.position; }
         }
+
         public Vector3 Velocity
         {
-            get
-            {
-                return m_InitVelocity;
-            }
+            get { return m_InitVelocity; }
         }
+
         private Tank m_Owner;
         private Vector3 m_InitVelocity;
+
         internal void Init(Tank owner, Vector3 initPos, Vector3 initVelocity)
         {
             ID = GetNextID();
@@ -43,14 +41,15 @@ namespace Main
             m_InitVelocity = initVelocity;
             transform.position = initPos;
         }
+
         void Update()
         {
             bool hitOthers = false;
             //check if missile is within a tank's collider
             Tank oppTank = Match.instance.GetOppositeTank(Team);
-            if(oppTank != null && oppTank.IsDead == false)
+            if (oppTank != null && oppTank.IsDead == false)
             {
-                if(oppTank.IsInFireCollider(Position))
+                if (oppTank.IsInFireCollider(Position))
                 {
                     hitOthers = true;
                     oppTank.TakeDamage(m_Owner);
@@ -58,6 +57,7 @@ namespace Main
                     Match.instance.RemoveMissile(this);
                 }
             }
+
             Vector3 newPos = Position + m_InitVelocity * Time.deltaTime;
             if (hitOthers == false)
             {
@@ -81,12 +81,14 @@ namespace Main
                                 hitOwner = true;
                             }
                         }
+
                         Utils.PlayParticle("CFX3_Hit_SmokePuff", hitInfo.point);
                     }
                     else
                     {
                         Utils.PlayParticle("CFX3_Hit_SmokePuff_Wall", hitInfo.point);
                     }
+
                     if (hitOwner == false)
                     {
                         Match.instance.RemoveMissile(this);
@@ -94,7 +96,8 @@ namespace Main
                     }
                 }
             }
-            if(hitOthers == false)
+
+            if (hitOthers == false)
             {
                 transform.position = newPos;
             }

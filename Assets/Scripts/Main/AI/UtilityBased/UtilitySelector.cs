@@ -6,9 +6,11 @@ namespace AI.UtilityBased
 {
     public enum ESelResult
     {
-        First, Second
+        First,
+        Second
     }
-    abstract public class Selector
+
+    public abstract class Selector
     {
         public float Sel(float a, float b, out ESelResult ret)
         {
@@ -23,8 +25,10 @@ namespace AI.UtilityBased
                 return b;
             }
         }
+
         protected abstract bool DoCompare(float a, float b);
     }
+
     public class MaxSelector : Selector
     {
         protected override bool DoCompare(float a, float b)
@@ -32,29 +36,33 @@ namespace AI.UtilityBased
             return a > b ? true : false;
         }
     }
+
     public static class UtilitySelector
     {
         public static int Select(IAgent agent, Selector sel, params Utility[] us)
         {
-            if(us.Length == 0)
+            if (us.Length == 0)
             {
                 return -1;
             }
+
             float finalValue = us[0].CalcU(agent);
             int selIndex = 0;
             ESelResult ret;
-            for(int i = 1; i < us.Length; ++i)
+            for (int i = 1; i < us.Length; ++i)
             {
                 finalValue = sel.Sel(finalValue, us[i].CalcU(agent), out ret);
-                if(ret == ESelResult.Second)
+                if (ret == ESelResult.Second)
                 {
                     selIndex = i;
                 }
             }
-            if(Mathf.Abs(finalValue) <= Mathf.Epsilon)
+
+            if (Mathf.Abs(finalValue) <= Mathf.Epsilon)
             {
                 return -1;
             }
+
             return selIndex;
         }
     }

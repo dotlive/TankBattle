@@ -3,9 +3,13 @@ using AI.Blackboard;
 
 namespace AI.BehaviourTree
 {
+    /// <summary>
+    /// 选择节点 (or)
+    /// </summary>
     public class SelectorNode : Node
     {
         private Node m_LastRunningNode;
+
         protected override ERunningStatus OnUpdate(IAgent agent, BlackboardMemory workingMemory)
         {
             ERunningStatus runningStatus = ERunningStatus.Finished;
@@ -15,25 +19,29 @@ namespace AI.BehaviourTree
             foreach (Node c in m_Children)
             {
                 runningStatus = c.Update(agent, workingMemory);
-                if(runningStatus != ERunningStatus.Failed)
+                if (runningStatus != ERunningStatus.Failed)
                 {
                     m_LastRunningNode = c;
                     break;
                 }
             }
+
             //clear last running node
             if (previousNode != m_LastRunningNode && previousNode != null)
             {
                 previousNode.Reset(agent, workingMemory);
             }
+
             return runningStatus;
         }
+
         protected override void OnReset(IAgent agent, BlackboardMemory workingMemory)
         {
             if (m_LastRunningNode != null)
             {
                 m_LastRunningNode.Reset(agent, workingMemory);
             }
+
             m_LastRunningNode = null;
         }
     }

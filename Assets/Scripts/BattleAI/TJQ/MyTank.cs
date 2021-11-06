@@ -7,11 +7,12 @@ namespace TJQ
     class MyTank : Tank
     {
         private float m_LastTime = 0;
+
         protected override void OnUpdate()
         {
             base.OnUpdate();
 
-            if(HP <= 50)
+            if (HP <= 50)
             {
                 Move(Match.instance.GetRebornPos(Team));
             }
@@ -23,7 +24,7 @@ namespace TJQ
                 foreach (var pair in Match.instance.GetStars())
                 {
                     Star s = pair.Value;
-                    if(s.IsSuperStar)
+                    if (s.IsSuperStar)
                     {
                         hasStar = true;
                         nearestStarPos = s.Position;
@@ -40,6 +41,7 @@ namespace TJQ
                         }
                     }
                 }
+
                 if (hasStar == true)
                 {
                     Move(nearestStarPos);
@@ -55,16 +57,17 @@ namespace TJQ
                     }
                 }
             }
+
             Tank oppTank = Match.instance.GetOppositeTank(Team);
-            if(oppTank != null)
+            if (oppTank != null)
             {
-                if(CanSeeOthers(oppTank))
+                if (CanSeeOthers(oppTank))
                 {
                     TurretTurnTo(oppTank.Position);
                     Vector3 toTarget = oppTank.Position - FirePos;
                     toTarget.y = 0;
                     toTarget.Normalize();
-                    if(Vector3.Dot(TurretAiming, toTarget) > 0.98f)
+                    if (Vector3.Dot(TurretAiming, toTarget) > 0.98f)
                     {
                         Fire();
                     }
@@ -75,16 +78,19 @@ namespace TJQ
                 }
             }
         }
+
         protected override void OnReborn()
         {
             base.OnReborn();
             m_LastTime = 0;
         }
+
         private bool ApproachNextDestination()
         {
             float halfSize = PhysicsUtils.MaxFieldSize * 0.5f;
             return Move(new Vector3(Random.Range(-halfSize, halfSize), 0, Random.Range(-halfSize, halfSize)));
         }
+
         public override string GetName()
         {
             return "TJQ";
